@@ -42,13 +42,13 @@ const routes = [
     component: () => import('../views/RestaurantsTop.vue')
   },
   {
-    //餐廳詳細頁面:id是動態路由也是變數，應放置restautants/最下層
+    //餐廳詳細頁面:id是動態路由也是變數，應放置restaurants/最下層
     path: '/restaurants/:id',
     name: 'restaurant',
     component: () => import('../views/Restaurant.vue')
   },
   {
-    //餐廳詳細頁面:id是動態路由也是變數，應放置restautants/最下層
+    //餐廳詳細頁面:id是動態路由也是變數，應放置restaurants/最下層
     path: '/restaurants/:id/dashboard',
     name: 'restaurant-dashboard',
     component: () => import('../views/RestaurantDashboard.vue')
@@ -64,6 +64,22 @@ const routes = [
     path: '/users/:id',
     name: 'user',
     component: () => import('../views/User.vue')
+  },
+  {
+    path: '/admin',
+    exact: true, //網址需要完全匹配到才會進來此路由
+    redirect: '/admin/restaurants'
+  },
+  {
+    //admin-restaurants
+    path: '/admin/restaurants',
+    name: 'admin-restaurants',
+    component: () => import('../views/AdminRestaurants.vue')
+  },
+  {
+    path: '/admin/restaurants/:id',
+    name: 'admin-restaurant',
+    component: () => import('../views/AdminRestaurant.vue')
   },
   {
     path: '*',
