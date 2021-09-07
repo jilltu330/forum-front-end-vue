@@ -53,6 +53,7 @@
 
 <script>
 import authorizationAPI from './../apis/authorization'
+import { Toast } from './../utils/helpers'
 
 export default {
   data() {
@@ -63,19 +64,43 @@ export default {
   },
   methods: {
     handleSubmit() {
+      //送出表單呼叫API之前可用JS驗證表單
+      if ( !this.email || !this.passwrod ){
+        Toast.fire({
+          icon: 'warning',
+          title: '請填入帳號和密碼'
+        })
+        return
+      }
+
+
+      //axios 之後會回傳一個 Promise 物件，我們再直接把這個物件 return 出去，之後 Vue 元件接到 Promise 物件後，就可以用 then 做後續操作
         authorizationAPI.signIn({
         email: this.email,
         password: this.password
       }).then(response => {
-
-        //response 是伺服器回傳的資料裡面的data屬性
+        //取得 API 請求後的資料.response 是伺服器回傳的資料裡面的data屬性
         const { data } = response
-        localStorage.setItem( 'token', data.token )
 
+        //再存入localstorage前做使用者輸入資料判斷
+        if (status !== 'success') {
+          //請拋出錯誤訊息，訊息帶伺服器的訊息
+          throw new Error(data.message)
+        }
+
+        // 將 token 存放在 localStorage 內
+        localStorage.setItem( 'token', data.token )
         //成功登入後將網址轉到首頁
         this.$router.push('/restaurants')
       }).catch(error => {
-
+        //登入時發生握物處理eg漏填表單或密碼錯誤
+        this.password = ''
+        //顯示錯誤提示
+        Toast.fire({
+          icon: "warning",
+          title: "輸入的帳號密碼有誤"
+        })
+        console.log("error :", error)
       })
     },
   },
