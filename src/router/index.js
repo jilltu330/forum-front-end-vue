@@ -11,7 +11,7 @@ const routes = [
     //  /#/根目錄導到首頁
     path: '/',
     name: 'root',
-    redirect: '/restaurants'
+    redirect: '/signin'
 
   },
   {

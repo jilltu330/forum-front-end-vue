@@ -52,6 +52,8 @@
 
 
 <script>
+import authorizationAPI from './../apis/authorization'
+
 export default {
   data() {
     return {
@@ -61,14 +63,20 @@ export default {
   },
   methods: {
     handleSubmit() {
-      //submit事件是跟在表單form
-      //向後端伺服器驗證使用者資料，送資料前會轉成json格式
-      const data = JSON.stringify({
+        authorizationAPI.signIn({
         email: this.email,
-        password: this.password,
-      });
+        password: this.password
+      }).then(response => {
 
-      console.log("data", data);
+        //response 是伺服器回傳的資料裡面的data屬性
+        const { data } = response
+        localStorage.setItem( 'token', data.token )
+
+        //成功登入後將網址轉到首頁
+        this.$router.push('/restaurants')
+      }).catch(error => {
+
+      })
     },
   },
 };
