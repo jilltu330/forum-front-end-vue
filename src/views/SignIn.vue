@@ -68,8 +68,9 @@ export default {
     };
   },
   methods: {
-    handleSubmit() {
-      // 1. 先由前端Javascript確認表單填寫完畢，無空值
+    async handleSubmit(e) {
+      try{
+        // 1. 先由前端Javascript確認表單填寫完畢，無空值
       // 如果 email 或 password 為空，則使用 Toast 提示
       // 然後 return 不繼續往後執行
       if ( !this.email || !this.passwrod ){
@@ -84,10 +85,11 @@ export default {
 
       // 2. 表單有資料後才開始呼叫api向後端做驗證
       //axios 之後會回傳一個 Promise 物件，我們再直接把這個物件 return 出去，之後 Vue 元件接到 Promise 物件後，就可以用 then 做後續操作
-        authorizationAPI.signIn({
+        const response = await authorizationAPI.signIn({
         email: this.email,
         password: this.password
-      }).then(response => {
+      })
+      
         //取得 API 請求後的資料.response 是伺服器回傳的資料裡面的data屬性
         const { data } = response
 
@@ -101,9 +103,9 @@ export default {
         localStorage.setItem( 'token', data.token )
         //成功登入後將網址轉到首頁
         this.$router.push('/restaurants')
-      }).catch(error => {
-        //登入時發生握物處理eg漏填表單或密碼錯誤
 
+      } catch(error) {
+          //登入時發生握物處理eg漏填表單或密碼錯誤
         //當使用者輸入錯誤密碼時，須將isProcessing改為false才能夠再次按button送出表單
         this.isProcessing = false
 
@@ -115,7 +117,7 @@ export default {
           title: "輸入的帳號密碼有誤"
         })
         console.log("error :", error)
-      })
+      }
     },
   },
 };
