@@ -34,7 +34,11 @@
         />
       </div>
 
-      <button class="btn btn-lg btn-primary btn-block mb-3" type="submit">
+      <button 
+        class="btn btn-lg btn-primary btn-block mb-3" 
+        type="submit"
+        :disabled="isProcessing" 
+        >
         Submit
       </button>
 
@@ -60,11 +64,14 @@ export default {
     return {
       email: "",
       password: "",
+      isProcessing: false, //預設false, 意思判斷submition是否已經在處理中，如處理中則使用者無法繼續點擊按鈕
     };
   },
   methods: {
     handleSubmit() {
-      //送出表單呼叫API之前可用JS驗證表單
+      // 1. 先由前端Javascript確認表單填寫完畢，無空值
+      // 如果 email 或 password 為空，則使用 Toast 提示
+      // 然後 return 不繼續往後執行
       if ( !this.email || !this.passwrod ){
         Toast.fire({
           icon: 'warning',
@@ -72,8 +79,10 @@ export default {
         })
         return
       }
+      //User做完第一層表單驗證後，API呼叫前將isProccessing(處理狀態)改為處理中
+      this.isProcessing = true
 
-
+      // 2. 表單有資料後才開始呼叫api向後端做驗證
       //axios 之後會回傳一個 Promise 物件，我們再直接把這個物件 return 出去，之後 Vue 元件接到 Promise 物件後，就可以用 then 做後續操作
         authorizationAPI.signIn({
         email: this.email,
@@ -94,6 +103,11 @@ export default {
         this.$router.push('/restaurants')
       }).catch(error => {
         //登入時發生握物處理eg漏填表單或密碼錯誤
+
+        //當使用者輸入錯誤密碼時，須將isProcessing改為false才能夠再次按button送出表單
+        this.isProcessing = false
+
+        // 將密碼欄位清空
         this.password = ''
         //顯示錯誤提示
         Toast.fire({
