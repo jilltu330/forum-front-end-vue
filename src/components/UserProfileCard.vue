@@ -25,11 +25,13 @@
           </ul>
           <p></p>
           <template v-if="profile.id === currentUser.id">
-            <router-link :to="{ name:'user-edit', params:{ id: profile.id } }">
+            <router-link
+              :to="{ name: 'user-edit', params: { id: profile.id } }"
+            >
               <button type="submit" class="btn btn-primary">Edit</button>
             </router-link>
           </template>
-          
+
           <template v-else>
             <button
               v-if="profile.isFollowed"
@@ -47,7 +49,6 @@
             >
               追蹤
             </button>
-
           </template>
           <p></p>
         </div>

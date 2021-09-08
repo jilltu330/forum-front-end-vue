@@ -6,4 +6,3 @@
     <router-link to="/admin/users">Users</router-link> |
   </div>
 </template>
-

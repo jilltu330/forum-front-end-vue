@@ -6,31 +6,19 @@
     <table class="table">
       <thead class="thead-dark">
         <tr>
-          <th scope="col">
-            #
-          </th>
-          <th scope="col">
-            Email
-          </th>
-          <th scope="col">
-            Role
-          </th>
-          <th
-            scope="col"
-            width="140"
-          >
-            Action
-          </th>
+          <th scope="col">#</th>
+          <th scope="col">Email</th>
+          <th scope="col">Role</th>
+          <th scope="col" width="140">Action</th>
         </tr>
       </thead>
       <tbody>
-
         <tr v-for="user in users" :key="user.id">
           <th scope="row">
             {{ user.id }}
           </th>
           <td>{{ user.email }}</td>
-          <td>{{ user.isAdmin ? 'admin' : 'user'}}</td>
+          <td>{{ user.isAdmin ? "admin" : "user" }}</td>
           <td>
             <button
               v-if="user.id !== currentUser.id"
@@ -38,18 +26,17 @@
               class="btn btn-link"
               @click.stop.prevent="toggleUserRole(user.id)"
             >
-              {{ user.isAdmin ? 'set as user' : 'set as admin'}}
+              {{ user.isAdmin ? "set as user" : "set as admin" }}
             </button>
           </td>
         </tr>
-        
       </tbody>
     </table>
   </div>
 </template>
 
 <script>
-import AdminNav from '@/components/AdminNav'
+import AdminNav from "@/components/AdminNav";
 
 const dummyData = {
   users: [
@@ -473,38 +460,35 @@ const dummyUser = {
   isAuthenticated: true,
 };
 
-
 export default {
   components: {
-    AdminNav
+    AdminNav,
   },
   data() {
     return {
       users: [],
       currentUser: dummyUser.currentUser,
-    }
+    };
   },
   created() {
-    this.fetchUser()
+    this.fetchUser();
   },
   methods: {
     fetchUser() {
-      this.users = dummyData.users
+      this.users = dummyData.users;
     },
     toggleUserRole(userId) {
-      this.users = this.users.map( user => {
-        if(user.id === userId) {
+      this.users = this.users.map((user) => {
+        if (user.id === userId) {
           return {
             ...user,
-            isAdmin: !user.isAdmin
-          }
+            isAdmin: !user.isAdmin,
+          };
         }
 
-        return user
-      })
-    }
-  }
-
-}
-
+        return user;
+      });
+    },
+  },
+};
 </script>

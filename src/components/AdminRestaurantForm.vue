@@ -10,7 +10,7 @@
         name="name"
         placeholder="Enter name"
         required
-      >
+      />
     </div>
 
     <div class="form-group">
@@ -22,17 +22,14 @@
         name="categoryId"
         required
       >
+        <option value="" selected disabled>--請選擇--</option>
         <option
-          value=""
-          selected
-          disabled
+          v-for="category in categories"
+          :key="category.id"
+          :value="category.id"
         >
-          --請選擇--
+          {{ category.name }}
         </option>
-        <option v-for="category in categories" :key="category.id" :value="category.id">
-          {{ category.name}}
-        </option>
-        
       </select>
     </div>
 
@@ -45,7 +42,7 @@
         class="form-control"
         name="tel"
         placeholder="Enter telephone number"
-      >
+      />
     </div>
 
     <div class="form-group">
@@ -57,7 +54,7 @@
         class="form-control"
         placeholder="Enter address"
         name="address"
-      >
+      />
     </div>
 
     <div class="form-group">
@@ -68,7 +65,7 @@
         type="time"
         class="form-control"
         name="opening_hours"
-      >
+      />
     </div>
 
     <div class="form-group">
@@ -84,12 +81,13 @@
 
     <div class="form-group">
       <label for="image">Image</label>
-      <img v-if="restaurant.image" 
-        :src="restaurant.image" 
-        class="d-block img-thumbnail mb3" 
-        width="200" 
-        height="200" 
-      >
+      <img
+        v-if="restaurant.image"
+        :src="restaurant.image"
+        class="d-block img-thumbnail mb3"
+        width="200"
+        height="200"
+      />
       <input
         id="image"
         type="file"
@@ -97,107 +95,101 @@
         accept="image/*"
         class="form-control-file"
         @change="handleFileChange"
-      >
+      />
     </div>
 
-    <button
-      type="submit"
-      class="btn btn-primary"
-    >
-      送出
-    </button>
+    <button type="submit" class="btn btn-primary">送出</button>
   </form>
 </template>
 
 <script>
-
 const dummyData = {
   categories: [
     {
       id: 1,
-      name: '中式料理',
-      createdAt: '2019-06-22T09:00:43.000Z',
-      updatedAt: '2019-06-22T09:00:43.000Z'
+      name: "中式料理",
+      createdAt: "2019-06-22T09:00:43.000Z",
+      updatedAt: "2019-06-22T09:00:43.000Z",
     },
     {
       id: 2,
-      name: '日本料理',
-      createdAt: '2019-06-22T09:00:43.000Z',
-      updatedAt: '2019-06-22T09:00:43.000Z'
+      name: "日本料理",
+      createdAt: "2019-06-22T09:00:43.000Z",
+      updatedAt: "2019-06-22T09:00:43.000Z",
     },
     {
       id: 3,
-      name: '義大利料理',
-      createdAt: '2019-06-22T09:00:43.000Z',
-      updatedAt: '2019-06-22T09:00:43.000Z'
+      name: "義大利料理",
+      createdAt: "2019-06-22T09:00:43.000Z",
+      updatedAt: "2019-06-22T09:00:43.000Z",
     },
     {
       id: 4,
-      name: '墨西哥料理',
-      createdAt: '2019-06-22T09:00:43.000Z',
-      updatedAt: '2019-06-22T09:00:43.000Z'
-    }
-  ]
-}
+      name: "墨西哥料理",
+      createdAt: "2019-06-22T09:00:43.000Z",
+      updatedAt: "2019-06-22T09:00:43.000Z",
+    },
+  ],
+};
 
 export default {
   props: {
     initialRestaurant: {
       type: Object,
       default: () => ({
-        name: '',
-        categoryId: '',
-        tel: '',
-        address: '',
-        description: '',
-        image: '',
-        openingHours: '',
-      })
-    }
+        name: "",
+        categoryId: "",
+        tel: "",
+        address: "",
+        description: "",
+        image: "",
+        openingHours: "",
+      }),
+    },
   },
   data() {
     return {
       restaurant: {
-        name:'',
-        categoryId: '',
-        tel: '',
-        address: '',
-        description: '',
-        image: '',
-        openingHours: ''
+        name: "",
+        categoryId: "",
+        tel: "",
+        address: "",
+        description: "",
+        image: "",
+        openingHours: "",
       },
-      categories: []
-    }
+      categories: [],
+    };
   },
   created() {
-    this.fetchCategories()
+    this.fetchCategories();
     this.restaurant = {
       ...this.restaurant,
-      ...this.initialRestaurant
-    }
+      ...this.initialRestaurant,
+    };
   },
   methods: {
     fetchCategories() {
-      this.categories = dummyData.categories
+      this.categories = dummyData.categories;
     },
     handleFileChange(e) {
-      const { files } = e.target
-      
+      const { files } = e.target;
+
       if (files.length === 0) {
         //使用者沒有選擇上傳的檔案
-        this.restaurant.image = ''
-        return
+        this.restaurant.image = "";
+        return;
       } else {
         // 否則產生預覽圖
-        const imageURL = window.URL.createObjectURL(files[0])
-        this.restaurant.image = imageURL
+        const imageURL = window.URL.createObjectURL(files[0]);
+        this.restaurant.image = imageURL;
       }
     },
     handleSubmit(e) {
-      const form = e.target
-      const formData = new FormData(form)
-      this.$emit('after-submit', formData)
-    }
-  }
-}
+      const form = e.target;
+      const formData = new FormData(form);
+      this.$emit("after-submit", formData);
+    },
+  },
+};
 </script>

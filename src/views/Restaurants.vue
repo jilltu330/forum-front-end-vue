@@ -30,7 +30,6 @@ import RestaurantCard from "./../components/RestaurantCard";
 import RestaurantsNavPills from "./../components/RestaurantsNavPills";
 import RestaurantsPagination from "./../components/RestaurantsPagination";
 
-
 const dummyData = {
   restaurants: [
     {

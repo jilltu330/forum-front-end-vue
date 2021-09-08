@@ -34,11 +34,11 @@
         />
       </div>
 
-      <button 
-        class="btn btn-lg btn-primary btn-block mb-3" 
+      <button
+        class="btn btn-lg btn-primary btn-block mb-3"
         type="submit"
-        :disabled="isProcessing" 
-        >
+        :disabled="isProcessing"
+      >
         Submit
       </button>
 
@@ -51,13 +51,11 @@
       <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-2018</p>
     </form>
   </div>
-</template> 
-
-
+</template>
 
 <script>
-import authorizationAPI from './../apis/authorization'
-import { Toast } from './../utils/helpers'
+import authorizationAPI from "./../apis/authorization";
+import { Toast } from "./../utils/helpers";
 
 export default {
   data() {
@@ -69,54 +67,54 @@ export default {
   },
   methods: {
     async handleSubmit(e) {
-      try{
+      try {
         // 1. 先由前端Javascript確認表單填寫完畢，無空值
-      // 如果 email 或 password 為空，則使用 Toast 提示
-      // 然後 return 不繼續往後執行
-      if ( !this.email || !this.passwrod ){
-        Toast.fire({
-          icon: 'warning',
-          title: '請填入帳號和密碼'
-        })
-        return
-      }
-      //User做完第一層表單驗證後，API呼叫前將isProccessing(處理狀態)改為處理中
-      this.isProcessing = true
+        // 如果 email 或 password 為空，則使用 Toast 提示
+        // 然後 return 不繼續往後執行
+        if (!this.email || !this.passwrod) {
+          Toast.fire({
+            icon: "warning",
+            title: "請填入帳號和密碼",
+          });
+          return;
+        }
+        //User做完第一層表單驗證後，API呼叫前將isProccessing(處理狀態)改為處理中
+        this.isProcessing = true;
 
-      // 2. 表單有資料後才開始呼叫api向後端做驗證
-      //axios 之後會回傳一個 Promise 物件，我們再直接把這個物件 return 出去，之後 Vue 元件接到 Promise 物件後，就可以用 then 做後續操作
+        // 2. 表單有資料後才開始呼叫api向後端做驗證
+        //axios 之後會回傳一個 Promise 物件，我們再直接把這個物件 return 出去，之後 Vue 元件接到 Promise 物件後，就可以用 then 做後續操作
         const response = await authorizationAPI.signIn({
-        email: this.email,
-        password: this.password
-      })
-      
+          email: this.email,
+          password: this.password,
+        });
+        console.log("response", response);
+
         //取得 API 請求後的資料.response 是伺服器回傳的資料裡面的data屬性
-        const { data } = response
+        const { data } = response;
 
         //再存入localstorage前做使用者輸入資料判斷
-        if (status !== 'success') {
+        if (status !== "success") {
           //請拋出錯誤訊息，訊息帶伺服器的訊息
-          throw new Error(data.message)
+          throw new Error(data.message);
         }
 
         // 將 token 存放在 localStorage 內
-        localStorage.setItem( 'token', data.token )
+        localStorage.setItem("token", data.token);
         //成功登入後將網址轉到首頁
-        this.$router.push('/restaurants')
-
-      } catch(error) {
-          //登入時發生握物處理eg漏填表單或密碼錯誤
+        this.$router.push("/restaurants");
+      } catch (error) {
+        //登入時發生握物處理eg漏填表單或密碼錯誤
         //當使用者輸入錯誤密碼時，須將isProcessing改為false才能夠再次按button送出表單
-        this.isProcessing = false
+        this.isProcessing = false;
 
         // 將密碼欄位清空
-        this.password = ''
+        this.password = "";
         //顯示錯誤提示
         Toast.fire({
           icon: "warning",
-          title: "輸入的帳號密碼有誤"
-        })
-        console.log("error :", error)
+          title: "輸入的帳號密碼有誤",
+        });
+        console.log("error :", error);
       }
     },
   },
