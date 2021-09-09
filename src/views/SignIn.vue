@@ -71,7 +71,7 @@ export default {
         // 1. 先由前端Javascript確認表單填寫完畢，無空值
         // 如果 email 或 password 為空，則使用 Toast 提示
         // 然後 return 不繼續往後執行
-        if (!this.email || !this.passwrod) {
+        if (!this.email || !this.password) {
           Toast.fire({
             icon: "warning",
             title: "請填入帳號和密碼",
@@ -93,7 +93,7 @@ export default {
         const { data } = response;
 
         //再存入localstorage前做使用者輸入資料判斷
-        if (status !== "success") {
+        if (data.status !== "success") {
           //請拋出錯誤訊息，訊息帶伺服器的訊息
           throw new Error(data.message);
         }
