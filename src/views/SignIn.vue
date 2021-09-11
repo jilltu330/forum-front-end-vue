@@ -111,7 +111,7 @@ export default {
         this.password = "";
         //顯示錯誤提示
         Toast.fire({
-          icon: "warning",
+          icon:"warning",
           title: "輸入的帳號密碼有誤",
         });
         console.log("error :", error);
@@ -120,3 +120,6 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+</style>

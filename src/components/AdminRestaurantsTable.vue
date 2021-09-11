@@ -76,15 +76,23 @@ export default {
     },
     async deleteRestaurant(restaurantId) {
       try {
-        const { data } = await adminAPI.restaurants.deleteRestaurant({
+        const { data } = await adminAPI.restaurants.delete({
           restaurantId,
         });
+
         if (data.status !== "success") {
           throw new Error(data.message);
         }
+
         this.restaurants = this.restaurants.filter(
           (restaurant) => restaurant.id !== restaurantId
         );
+
+        Toast.fire({
+          icon: 'success',
+          title: '刪除餐廳成功'
+        })
+        
       } catch (error) {
         Toast.fire({
           icon: "error",

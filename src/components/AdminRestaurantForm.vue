@@ -112,15 +112,17 @@ export default {
   props: {
     initialRestaurant: {
       type: Object,
-      default: () => ({
-        name: "",
-        categoryId: "",
-        tel: "",
-        address: "",
-        description: "",
-        image: "",
-        openingHours: "",
-      }),
+      default: () => {
+        return {
+          name: '',
+          tel: '',
+          address: '',
+          openingHours: '',
+          description: '',
+          image: '',
+          CategoryId: ''
+        }
+      }
     },
     isProcessing: {
       type: Boolean,
@@ -135,6 +137,14 @@ export default {
       },
       isLoading: true,
     };
+  },
+  watch: {
+    initialRestaurant(newValue, oldValue) {
+      this.restaurant = {
+        ...this.restaurant,
+        ...newValue
+      }
+    },
   },
   created() {
     this.fetchCategories();

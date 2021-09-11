@@ -78,6 +78,9 @@
 </template>
 
 <script>
+import authorizationAPI from './../apis/authorization'
+import { Toast } from './../utils/helpers'
+
 export default {
   data() {
     return {
@@ -88,18 +91,54 @@ export default {
     };
   },
   methods: {
-    handleSubmit() {
-      //submit事件是跟在表單form
-      const data = JSON.stringify({
-        //資料會送到後端，送資料前會轉成json格式
-        name: this.name,
-        email: this.email,
-        password: this.password,
-        passwordCheck: this.passwordCheck,
-      });
+    async handleSubmit() {
+      try {
+        if (
+          !this.name ||
+          !this.email ||
+          !this.password ||
+          !this.passwordCheck
+        ) {
+          Toast.fire({
+            icon: "warning",
+            title: "請確認所有資料已填寫",
+          });
+          return;
+        }
 
-      //TODO:將資料送到後端伺服器註冊
-      console.log("data", data);
+        if (this.password !== this.passwordCheck) {
+          Toast.fire({
+            icon: "warning",
+            title: "請確認密碼相同",
+          });
+          this.passwordCheck = ''
+          return;
+        }
+
+        const { data } = await authorizationAPI.signUp({
+          name: this.name,
+          email: this.email,
+          password: this.password,
+          passwordCheck: this.passwordCheck,
+        });
+
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+
+        Toast.fire({
+          icon: "success",
+          title: data.message,
+        });
+
+        this.$router.push("/signin");
+
+      } catch (error) {
+        Toast.fire({
+          icon: "warning",
+          title: `無法註冊 - ${error.message}`
+        });
+      }
     },
   },
 };
