@@ -75,9 +75,8 @@ export default {
           Toast.fire({
             icon: "warning",
             title: "請填入帳號和密碼",
-          });
-          return;
-        }
+          });   
+        }  
         //User做完第一層表單驗證後，API呼叫前將isProccessing(處理狀態)改為處理中
         this.isProcessing = true;
 
