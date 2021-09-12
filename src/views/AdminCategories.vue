@@ -17,6 +17,7 @@
           <button
             type="button"
             class="btn btn-primary"
+            :disabled="isProcessing"
             @click.stop.prevent="createCategory"
           >
             新增
@@ -102,6 +103,7 @@ export default {
     return {
       categories: [],
       newCategoryName: "",
+      isProcessing: false,
     };
   },
   // 5. 調用 `fetchCategories` 方法
@@ -129,6 +131,7 @@ export default {
     },
     async createCategory({ name }) {
       try {
+        this.isProcessing = true
         const { data } = await adminAPI.categories.create({
           name: this.newCategoryName,
         });
@@ -142,9 +145,10 @@ export default {
           name: this.newCategoryName,
           isEditing: false,
         });
-
+        this.isProcessing = false
         this.newCategoryName = ""; // 清空原本欄位中的內容
       } catch (error) {
+        this.isProcessing = false
         Toast.fire({
           icon: "error",
           title: "無法新增餐廳類別，請稍後再試",
